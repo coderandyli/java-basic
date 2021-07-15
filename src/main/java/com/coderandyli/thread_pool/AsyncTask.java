@@ -1,5 +1,6 @@
 package com.coderandyli.thread_pool;
 
+import com.coderandyli.thread_pool.config.ThreadPoolConfig;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
@@ -38,6 +39,11 @@ public class AsyncTask {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+
+        /**
+         * 模拟异常 {@link ThreadPoolConfig#getAsyncUncaughtExceptionHandler()} 测试
+         */
+        throw new NullPointerException("模拟空指针异常");
     }
 
     /**

@@ -2,6 +2,9 @@ package com.coderandyli.thread_pool.config;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.aop.interceptor.AsyncUncaughtExceptionHandler;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.AsyncConfigurer;
@@ -22,7 +25,12 @@ import java.util.concurrent.ThreadPoolExecutor;
 @Slf4j
 @Configuration
 @EnableAsync
+@EnableConfigurationProperties(ThreadPoolProperties.class)
+@ConditionalOnProperty(prefix = "spring.async-thread-pool", name = "enable", havingValue = "true", matchIfMissing = false)
 public class ThreadPoolConfig implements AsyncConfigurer {
+
+    @Autowired
+    private ThreadPoolProperties threadPoolProperties;
 
     /**
      * 全局线程池
@@ -36,6 +44,12 @@ public class ThreadPoolConfig implements AsyncConfigurer {
          * maxSize = cpu核数 * 25
          * 该配置公式没有考虑多业务场景，不适合多线程池的应用中.
          */
+
+        log.info("读取配置信息");
+        log.info("{}", threadPoolProperties.getCorePoolSize());
+        log.info("{}", threadPoolProperties.getMaxPoolSize());
+        log.info("{}", threadPoolProperties.getKeepAliveSeconds());
+        log.info("{}", threadPoolProperties.getAwaitTerminationSeconds());
 
         // cpu核数
         int processors = Runtime.getRuntime().availableProcessors();
