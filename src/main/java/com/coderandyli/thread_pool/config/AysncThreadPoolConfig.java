@@ -1,6 +1,7 @@
 package com.coderandyli.thread_pool.config;
 
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.aop.interceptor.AsyncUncaughtExceptionHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -12,11 +13,12 @@ import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
 import java.lang.reflect.Method;
+import java.util.Objects;
 import java.util.concurrent.Executor;
 import java.util.concurrent.ThreadPoolExecutor;
 
 /**
- * 订单线程池配置
+ * 线程池配置
  * https://docs.spring.io/spring-framework/docs/current/reference/html/integration.html#scheduling-annotation-support-async
  *
  * @Date 2021/7/14 3:14 下午
@@ -27,7 +29,7 @@ import java.util.concurrent.ThreadPoolExecutor;
 @EnableAsync
 @EnableConfigurationProperties(ThreadPoolProperties.class)
 @ConditionalOnProperty(prefix = "spring.async-thread-pool", name = "enable", havingValue = "true", matchIfMissing = false)
-public class ThreadPoolConfig implements AsyncConfigurer {
+public class AysncThreadPoolConfig implements AsyncConfigurer {
 
     @Autowired
     private ThreadPoolProperties threadPoolProperties;
@@ -44,31 +46,26 @@ public class ThreadPoolConfig implements AsyncConfigurer {
          * maxSize = cpu核数 * 25
          * 该配置公式没有考虑多业务场景，不适合多线程池的应用中.
          */
-
-        log.info("读取配置信息");
-        log.info("{}", threadPoolProperties.getCorePoolSize());
-        log.info("{}", threadPoolProperties.getMaxPoolSize());
-        log.info("{}", threadPoolProperties.getKeepAliveSeconds());
-        log.info("{}", threadPoolProperties.getAwaitTerminationSeconds());
-
         // cpu核数
         int processors = Runtime.getRuntime().availableProcessors();
 
         ThreadPoolTaskExecutor threadPool = new ThreadPoolTaskExecutor();
         //设置核心线程数
-        threadPool.setCorePoolSize(2 * processors);
+        threadPool.setCorePoolSize(Objects.nonNull(threadPoolProperties.getCorePoolSize()) ? threadPoolProperties.getCorePoolSize() : 2 * processors);
         //设置最大线程数
-        threadPool.setMaxPoolSize(25 * processors);
+        threadPool.setMaxPoolSize(Objects.nonNull(threadPoolProperties.getMaxPoolSize()) ? threadPoolProperties.getMaxPoolSize() : 25 * processors);
         //线程池所使用的缓冲队列
-        threadPool.setQueueCapacity(10);
+        threadPool.setQueueCapacity(Objects.nonNull(threadPoolProperties.getQueueCapacity()) ? threadPoolProperties.getQueueCapacity() : 20);
         //等待任务在关机时完成--表明等待所有线程执行完
-        threadPool.setWaitForTasksToCompleteOnShutdown(true);
+        threadPool.setWaitForTasksToCompleteOnShutdown(threadPoolProperties.isWaitForTasksToCompleteOnShutdown());
         // 设置拒绝策略
         // threadPool.setRejectedExecutionHandler();
         // 等待时间 （默认为0，此时立即停止），并没等待xx秒后强制停止
-        threadPool.setAwaitTerminationSeconds(60);
+        threadPool.setAwaitTerminationSeconds(threadPoolProperties.getAwaitTerminationSeconds());
+        //核心线程是否允许超时，默认:false
+        threadPool.setAllowCoreThreadTimeOut(threadPoolProperties.isAllowCoreThreadTimeOut());
         //  线程名称前缀
-        threadPool.setThreadNamePrefix("globalAsync-");
+        threadPool.setThreadNamePrefix(StringUtils.isNoneBlank(threadPoolProperties.getThreadNamePrefix()) ? threadPoolProperties.getThreadNamePrefix() : "Async-ThreadPool-");
         // 初始化线程
         threadPool.initialize();
         return threadPool;

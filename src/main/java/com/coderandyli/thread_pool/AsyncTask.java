@@ -1,9 +1,14 @@
 package com.coderandyli.thread_pool;
 
-import com.coderandyli.thread_pool.config.ThreadPoolConfig;
+import com.coderandyli.thread_pool.config.AysncThreadPoolConfig;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.stereotype.Component;
+
+import javax.annotation.Resource;
+import java.util.concurrent.ExecutorService;
 
 /**
  *
@@ -14,6 +19,9 @@ import org.springframework.stereotype.Component;
 @Slf4j
 @Component
 public class AsyncTask {
+    
+    @Resource(name = "bizOrderThreadPool")
+    private ExecutorService orderThreadPool;
 
     /**
      * 使用默认线程池
@@ -41,7 +49,7 @@ public class AsyncTask {
         }
 
         /**
-         * 模拟异常 {@link ThreadPoolConfig#getAsyncUncaughtExceptionHandler()} 测试
+         * 模拟异常 {@link AysncThreadPoolConfig#getAsyncUncaughtExceptionHandler()} 测试
          */
         throw new NullPointerException("模拟空指针异常");
     }
@@ -58,5 +66,14 @@ public class AsyncTask {
             e.printStackTrace();
         }
     }
+
+    /**
+     * ------------------------- 非注解方式 -----------------------------
+     */
+
+    public void orderAsyncTask2() {
+        orderThreadPool.execute(new OrderBiz());
+    }
+
 
 }

@@ -5,10 +5,10 @@ logging:
 spring:
   async-thread-pool:
     enable: true
-    core-pool-size: 4
-    max-pool-size: 40000
+    core-pool-size: 8
+    max-pool-size: 32
     queue-capacity: 80000
-    thread-name-prefix: xxx
+    thread-name-prefix: Global-Async-
     keep-alive-seconds: 60
     allow-core-thread-time-out: false
     wait-for-tasks-to-complete-on-shutdown: false
