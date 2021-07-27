@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
 import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Future;
 
 /**
  *
@@ -73,7 +74,16 @@ public class AsyncTask {
 
     public void orderAsyncTask2() {
         orderThreadPool.execute(new OrderBiz());
+
+        orderThreadPool.execute(() -> {});
     }
+
+    public void orderAsyncTask3() {
+        Future<?> submit = orderThreadPool.submit(new OrderBiz());
+        System.out.println( "orderAsyncTask3 ....");
+        // Object o = submit.get();
+    }
+
 
 
 }

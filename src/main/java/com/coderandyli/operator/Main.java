@@ -34,6 +34,12 @@ public class Main {
     @Test
     public void test01() {
         int leftShift = 10;
+        /**
+         * leftShift:          1010
+         * leftShift << 3   1010000
+         *
+         * leftShift << 3  《==》 10 * (2^3)
+         */
         int newLeftShift = leftShift << 3;
         log.info("【十进制形式】：位移前：{}, 位移后：{}", leftShift, newLeftShift);
         log.info("【二进制形式】：位移前：{}, 位移后：{}", Integer.toBinaryString(leftShift), Integer.toBinaryString(newLeftShift));

@@ -28,6 +28,7 @@ public class ThreadPoolController {
         asyncTask.orderAsyncTask();
         asyncTask.quoteAsyncTask();
         asyncTask.orderAsyncTask2();
+        asyncTask.orderAsyncTask3();
     }
 
     @GetMapping("/monitoring")
