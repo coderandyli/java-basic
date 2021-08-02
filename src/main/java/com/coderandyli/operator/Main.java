@@ -176,11 +176,23 @@ public class Main {
     }
 
     /**
+     * ~ : 非运算符
+     *   如果位为0，结果是1，如果位为1，结果是0
+     */
+    @Test
+    public void test06() {
+        int value1 = 536870911;
+        int value2 = ~536870911;
+        log.info("【二进制形式】value1 ={}", Integer.toBinaryString(value1) );
+        log.info("【二进制形式】value2 ={}", Integer.toBinaryString(value2) );
+    }
+
+    /**
      *  在java中%表示取余 【取余】有个规律就是：左边小于右边，结果为左边，左边大于右边，看余数
      *  在Python中%表示取模
      */
     @Test
-    public void test06(){
+    public void test07(){
         int a = -7;
         int b = 4;
         log.debug("a % b = {}", a % b);
@@ -196,7 +208,7 @@ public class Main {
      *  A % B = A & (B - 1)
      */
     @Test
-    public void test07(){
+    public void test08(){
         int a = 2002232424;
         int b = 32;
         log.debug("a % b = {}", a % b);
@@ -204,10 +216,9 @@ public class Main {
     }
 
     @Test
-    public void test08(){
+    public void test09(){
         int a = 7;
         int b = 4;
-
         log.debug("a/b = {}", a/b); // 取整
         log.debug("a%b = {}", a%b); // 求余
     }
