@@ -3,8 +3,6 @@
 
 ## 线程池的实现
 
-##
-
 
 # Reference
 - [Java线程池实现原理及其在美团业务中的实践](https://zhuanlan.zhihu.com/p/123328822)
