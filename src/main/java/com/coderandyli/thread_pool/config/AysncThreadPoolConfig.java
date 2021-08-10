@@ -30,6 +30,10 @@ import java.util.concurrent.ThreadPoolExecutor;
 @EnableConfigurationProperties(ThreadPoolProperties.class)
 @ConditionalOnProperty(prefix = "spring.async-thread-pool", name = "enable", havingValue = "true", matchIfMissing = false)
 public class AysncThreadPoolConfig implements AsyncConfigurer {
+    /**
+     * The number of CPUs
+     */
+    private static final int NCPUS = Runtime.getRuntime().availableProcessors();
 
     @Autowired
     private ThreadPoolProperties threadPoolProperties;
@@ -46,14 +50,12 @@ public class AysncThreadPoolConfig implements AsyncConfigurer {
          * maxSize = cpu核数 * 25
          * 该配置公式没有考虑多业务场景，不适合多线程池的应用中.
          */
-        // cpu核数
-        int processors = Runtime.getRuntime().availableProcessors();
 
         ThreadPoolTaskExecutor threadPool = new ThreadPoolTaskExecutor();
         //设置核心线程数
-        threadPool.setCorePoolSize(Objects.nonNull(threadPoolProperties.getCorePoolSize()) ? threadPoolProperties.getCorePoolSize() : 2 * processors);
+        threadPool.setCorePoolSize(Objects.nonNull(threadPoolProperties.getCorePoolSize()) ? threadPoolProperties.getCorePoolSize() : 2 * NCPUS);
         //设置最大线程数
-        threadPool.setMaxPoolSize(Objects.nonNull(threadPoolProperties.getMaxPoolSize()) ? threadPoolProperties.getMaxPoolSize() : 25 * processors);
+        threadPool.setMaxPoolSize(Objects.nonNull(threadPoolProperties.getMaxPoolSize()) ? threadPoolProperties.getMaxPoolSize() : 25 * NCPUS);
         //线程池所使用的缓冲队列
         threadPool.setQueueCapacity(Objects.nonNull(threadPoolProperties.getQueueCapacity()) ? threadPoolProperties.getQueueCapacity() : 20);
         //等待任务在关机时完成--表明等待所有线程执行完
