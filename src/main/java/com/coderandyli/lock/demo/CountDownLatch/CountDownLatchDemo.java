@@ -3,7 +3,7 @@ package com.coderandyli.lock.demo.CountDownLatch;
 import java.util.concurrent.CountDownLatch;
 
 /**
- * @description: CountDownLatch JDK示例
+ * @description: CountDownLatch JDK示例 --共享模式下锁可以被多个线程占有
  * @author: lizhenzhen
  * @date: 2021-04-29 17:04
  **/

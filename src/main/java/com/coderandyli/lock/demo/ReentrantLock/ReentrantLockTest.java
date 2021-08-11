@@ -1,4 +1,4 @@
-package com.coderandyli.lock;
+package com.coderandyli.lock.demo.ReentrantLock;
 
 /**
  * 可重入锁代码演示
