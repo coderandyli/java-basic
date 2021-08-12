@@ -75,7 +75,7 @@ public class AsyncTask {
     public void orderAsyncTask2() {
         orderThreadPool.execute(new OrderBiz());
 
-        orderThreadPool.execute(() -> {});
+        // orderThreadPool.execute(() -> {});
     }
 
     public void orderAsyncTask3() {

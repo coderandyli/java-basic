@@ -1,5 +1,6 @@
 package com.coderandyli.thread_pool;
 
+import com.coderandyli.thread_pool.dto.ThreadPoolDynamicInfoDto;
 import com.coderandyli.utils.SpringContextUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,8 +9,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.concurrent.ThreadPoolExecutor;
+
 /**
- *
  * @Date 2021/7/14 3:55 下午
  * @Created by lizhenzhen
  */
@@ -24,15 +26,15 @@ public class ThreadPoolController {
     @GetMapping("/exec-async-task")
     public void asyncTask() {
         log.info("exec async task, the current is 【{}】", Thread.currentThread().getName());
-        asyncTask.defaultAsyncTask();
-        asyncTask.orderAsyncTask();
-        asyncTask.quoteAsyncTask();
+//        asyncTask.defaultAsyncTask();
+//        asyncTask.orderAsyncTask();
+//        asyncTask.quoteAsyncTask();
         asyncTask.orderAsyncTask2();
-        asyncTask.orderAsyncTask3();
+//        asyncTask.orderAsyncTask3();
     }
 
     @GetMapping("/monitoring")
-    public void theadPoolMonitoring() {
+    public ThreadPoolDynamicInfoDto theadPoolMonitoring() {
         ThreadPoolTaskExecutor globalAsyncExecutor = (ThreadPoolTaskExecutor) SpringContextUtils.getBean("globalAsyncExecutor");
         log.info("【GLOBAL-ASYNC-EXECUTOR INFO】the core pool size is 【{}】, " +
                         "the max pool size is 【{}】," +
@@ -86,6 +88,40 @@ public class ThreadPoolController {
                 quoteAsyncExecutor.getThreadGroup(),
                 quoteAsyncExecutor.getThreadNamePrefix(),
                 quoteAsyncExecutor.getThreadPriority());
+
+        ThreadPoolExecutor bizOrderExecutor = (ThreadPoolExecutor) SpringContextUtils.getBean("bizOrderThreadPool");
+        ThreadPoolDynamicInfoDto infoDto = new ThreadPoolDynamicInfoDto();
+        infoDto.setActiveCount(
+                bizOrderExecutor.getActiveCount()
+        );
+         infoDto.setCompletedTaskCount(
+                 bizOrderExecutor.getCompletedTaskCount()
+         );
+        infoDto.setCorePoolSize(
+                bizOrderExecutor.getCorePoolSize()
+        );
+//        infoDto.setKeepAliveTime(
+//                bizOrderExecutor.getKeepAliveTime()
+//        );
+        infoDto.setLargestPoolSize(
+                bizOrderExecutor.getLargestPoolSize()
+        );
+        infoDto.setMaximumPoolSize(
+                bizOrderExecutor.getMaximumPoolSize()
+        );
+        infoDto.setPoolSize(
+                bizOrderExecutor.getPoolSize()
+        );
+        infoDto.setQueue(
+                bizOrderExecutor.getQueue()
+        );
+//        infoDto.setRejectedExecutionHandler(
+//                bizOrderExecutor.getRejectedExecutionHandler()
+//        );
+        infoDto.setTaskCount(
+                bizOrderExecutor.getLargestPoolSize()
+        );
+        return infoDto;
     }
 
     @GetMapping("/modify-config")

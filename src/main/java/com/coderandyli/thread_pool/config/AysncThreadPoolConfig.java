@@ -33,7 +33,7 @@ public class AysncThreadPoolConfig implements AsyncConfigurer {
     /**
      * The number of CPUs
      */
-    private static final int NCPUS = Runtime.getRuntime().availableProcessors();
+    private static final int NCPUS = Runtime.getRuntime().availableProcessors(); // 8
 
     @Autowired
     private ThreadPoolProperties threadPoolProperties;

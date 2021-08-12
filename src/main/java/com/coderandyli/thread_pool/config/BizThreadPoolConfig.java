@@ -19,10 +19,10 @@ public class BizThreadPoolConfig {
      * @return
      */
     @Bean(value = "bizOrderThreadPool")
-    public ExecutorService buildBizOrderQueueThreadPool(){
+    public ThreadPoolExecutor buildBizOrderQueueThreadPool(){
         ThreadFactory namedThreadFactory = new ThreadFactoryBuilder()
                 .setNameFormat("order-thread-%d").build();
-        ExecutorService pool = new ThreadPoolExecutor(5, // 核心线程数
+        ThreadPoolExecutor pool = new ThreadPoolExecutor(5, // 核心线程数
                 5,  // 最大线程数
                 0L, //
                 TimeUnit.MILLISECONDS,
